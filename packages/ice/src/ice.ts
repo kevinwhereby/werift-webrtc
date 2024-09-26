@@ -711,6 +711,7 @@ export class Connection {
               p.state,
             )
           ) {
+            log("CandidatePairState.FAILED, checkComplete", p.toJSON());
             this.setPairState(p, CandidatePairState.FAILED);
           }
         }
@@ -805,7 +806,7 @@ export class Connection {
           return;
         } else {
           // timeout
-          log("CandidatePairState.FAILED", pair.toJSON());
+          log("CandidatePairState.FAILED, timeout", pair.toJSON());
           this.setPairState(pair, CandidatePairState.FAILED);
           this.checkComplete(pair);
           r();
@@ -815,6 +816,7 @@ export class Connection {
 
       // # check remote address matches
       if (!isEqual(result.addr, pair.remoteAddr)) {
+        log("CandidatePairState.FAILED, !isEqual", pair.toJSON());
         this.setPairState(pair, CandidatePairState.FAILED);
         this.checkComplete(pair);
         r();
@@ -836,6 +838,7 @@ export class Connection {
             Buffer.from(this.remotePassword, "utf8"),
           );
         } catch (error) {
+          log("CandidatePairState.FAILED, request error", pair.toJSON(), error);
           this.setPairState(pair, CandidatePairState.FAILED);
           this.checkComplete(pair);
           return;
