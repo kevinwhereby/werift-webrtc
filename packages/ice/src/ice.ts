@@ -793,7 +793,7 @@ export class Connection {
       } catch (error: any) {
         const exc: TransactionError = error;
         // 7.1.3.1.  Failure Cases
-        log("failure case", exc.response);
+        log("failure case", exc);
         if (exc.response?.getAttributeValue("ERROR-CODE")[0] === 487) {
           if (request.attributesKeys.includes("ICE-CONTROLLED")) {
             this.switchRole(true);
