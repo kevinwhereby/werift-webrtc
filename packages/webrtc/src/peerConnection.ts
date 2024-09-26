@@ -779,20 +779,24 @@ export class RTCPeerConnection extends EventTarget {
 
     await Promise.allSettled(
       this.dtlsTransports.map(async (dtlsTransport) => {
+        log("Starting dtlsTransport", dtlsTransport);
         const { iceTransport } = dtlsTransport;
         await iceTransport.start().catch((err) => {
           log("iceTransport.start failed", err);
           throw err;
         });
+        log("iceTransport started");
         await dtlsTransport.start().catch((err) => {
           log("dtlsTransport.start failed", err);
           throw err;
         });
+        log("dtlsTransport started");
         if (
           this.sctpTransport &&
           this.sctpRemotePort &&
           this.sctpTransport.dtlsTransport.id === dtlsTransport.id
         ) {
+          log("starting sctpTransport");
           await this.sctpTransport.start(this.sctpRemotePort);
           await this.sctpTransport.sctp.stateChanged.connected.asPromise();
           log("sctp connected");

@@ -116,7 +116,7 @@ export class RTCDtlsTransport {
         this.role = "client";
       }
     }
-
+    log("dtlsTransport connecting with role", this.role);
     this.setState("connecting");
 
     await new Promise<void>(async (r) => {
@@ -152,7 +152,10 @@ export class RTCDtlsTransport {
       this.dtls.onClose.subscribe(() => {
         this.setState("closed");
       });
-      this.dtls.onConnect.once(r);
+      this.dtls.onConnect.once(() => {
+        log("dtls.onConnect");
+        r();
+      });
       this.dtls.onError.subscribe((error) => {
         this.setState("failed");
         log("dtls failed", error);
